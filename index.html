@@ -141,9 +141,16 @@
         }
         section.visible { opacity: 1; transform: translateY(0); }
 
-        /* TYPOGRAPHY */
+        /* TYPOGRAPHY - OPTIMIZED SIZE */
         h1, h2, h3 { color: var(--text-primary); font-weight: 600; letter-spacing: -0.02em; }
-        h1 { font-family: 'Playfair Display', serif; font-size: 4.5rem; line-height: 1.1; margin-bottom: 1.5rem; }
+        
+        h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 3.5rem; /* REDUCED from 4.5rem for better balance */
+            line-height: 1.2; 
+            margin-bottom: 1.5rem; 
+        }
+        
         h2 { font-size: 2rem; margin-bottom: 2.5rem; }
         
         .subtitle { color: var(--text-secondary); font-size: 1.2rem; max-width: 580px; margin-bottom: 3rem; }
