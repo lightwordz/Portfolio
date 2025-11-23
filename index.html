@@ -55,7 +55,6 @@
             padding: 3rem 1.5rem;
             display: flex;
             flex-direction: column;
-            /* FIX: Removed space-between to keep elements closer */
             gap: 3rem; 
             border-right: 1px solid var(--border-subtle);
             background: var(--bg-body);
@@ -70,11 +69,24 @@
             font-size: 1.5rem;
             font-weight: 600;
             letter-spacing: -0.5px;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem; /* Reduced margin to fit badge closer */
             color: var(--text-primary);
             text-decoration: none;
             display: block;
         }
+
+        /* Moved Status Badge CSS Here for context */
+        .status-badge {
+            display: inline-flex; align-items: center;
+            font-size: 0.75rem; color: #059669; background: #ECFDF5;
+            padding: 4px 10px; border-radius: 20px; width: fit-content;
+            margin-bottom: 2rem; /* Space between badge and nav */
+        }
+        .status-dot {
+            width: 6px; height: 6px; background: #059669; border-radius: 50%; margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
         .nav-links {
             display: flex;
@@ -99,26 +111,21 @@
             width: 6px; height: 6px; background: var(--text-primary); border-radius: 50%;
         }
 
-        /* Sidebar Footer - Positioned naturally now */
+        /* Sidebar Footer */
         .sidebar-footer { 
             display: flex; 
             flex-direction: column; 
             gap: 1.2rem; 
-            margin-top: 1rem; 
+            margin-top: auto; /* Pushes footer to bottom naturally */
         }
 
-        .status-badge {
-            display: inline-flex; align-items: center;
-            font-size: 0.75rem; color: #059669; background: #ECFDF5;
-            padding: 4px 10px; border-radius: 20px; width: fit-content;
+        /* FIX: Centered Social Icons */
+        .socials { 
+            display: flex; 
+            gap: 1rem; 
+            justify-content: center; /* Centers the icons horizontally */
         }
-        .status-dot {
-            width: 6px; height: 6px; background: #059669; border-radius: 50%; margin-right: 6px;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-
-        .socials { display: flex; gap: 1rem; }
+        
         .social-icon {
             color: var(--text-secondary); font-size: 1.1rem; transition: 0.3s;
         }
@@ -151,16 +158,16 @@
         .btn-minimal:hover { background: white; color: var(--text-primary); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
 
         .btn-outline {
-            display: inline-flex; /* Fix for alignment */
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 0.8rem 1rem; /* Adjusted padding for sidebar width */
+            padding: 0.8rem 1rem;
             background: transparent;
             color: var(--text-primary); text-decoration: none; border-radius: 4px;
             font-size: 0.85rem; font-weight: 500; border: 1px solid var(--border-subtle);
             transition: 0.3s var(--ease); width: 100%; text-align: center;
-            white-space: nowrap; /* FIX: Force one line */
+            white-space: nowrap;
         }
         .btn-outline:hover { border-color: var(--text-primary); background: white; }
 
@@ -172,10 +179,9 @@
         }
         .btn-small:hover { border-color: var(--text-primary); background: #f9f9f9; }
 
-        /* GRIDS - WIDER CARDS FIX */
+        /* GRIDS */
         .grid-2 { 
             display: grid; 
-            /* Changed from 280px to 350px to force wider cards (likely 2 columns instead of 3) */
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
             gap: 2.5rem; 
         }
@@ -256,7 +262,6 @@
         .back-to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
         .back-to-top:hover { transform: translateY(-5px); background-color: #333; }
 
-        /* Primary Resume Button */
         .primary-resume-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
         .mobile-resume-btn { display: none; align-items: center; justify-content: center; gap: 8px; }
 
@@ -290,7 +295,6 @@
         @media (max-width: 480px) {
             h1 { font-size: 2rem; }
             .clean-card { padding: 1.5rem; }
-            /* Allow cards to fill screen on mobile */
             .grid-2 { grid-template-columns: 1fr; } 
             .sidebar { padding: 1rem; }
             .back-to-top { bottom: 1.5rem; right: 1.5rem; width: 3rem; height: 3rem; }
@@ -304,6 +308,10 @@
         <aside class="sidebar">
             <div class="sidebar-top">
                 <a href="#" class="logo">Saurav Ojha</a>
+                
+                <!-- MOVED UP: Status Badge is now high visibility -->
+                <div class="status-badge"><div class="status-dot"></div> Available for work</div>
+
                 <nav class="nav-links">
                     <a href="#home" class="nav-link active">Intro</a>
                     <a href="#about" class="nav-link">About</a>
@@ -315,9 +323,7 @@
                 </nav>
             </div>
 
-            <!-- Sidebar Footer Grouped naturally -->
             <div class="sidebar-footer">
-                <div class="status-badge"><div class="status-dot"></div> Available for work</div>
                 <a href="https://docs.google.com/document/d/16FV3bjZq4vz48fH0dCRBfhYk_vvWvC_H/export?format=pdf" class="btn-outline"><i class="fas fa-download"></i> Download CV</a>
                 <div class="socials">
                     <a href="https://www.linkedin.com/in/sauravojha/" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
