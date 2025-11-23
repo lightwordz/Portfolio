@@ -1,72 +1,632 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <title>Portfolio Website</title>
+    <title>Saurav Ojha | Data Scientist</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+    <style>
+        /* --- 1. MINIMALIST VARIABLES --- */
+        :root {
+            --bg-body: #FAFAFA;
+            --bg-card: #FFFFFF;
+            --text-primary: #111111;
+            --text-secondary: #444444;
+            --accent: #222222;
+            --accent-blue: #2563EB;
+            --border-subtle: #E5E5E5;
+            --shadow-soft: 0 10px 40px rgba(0,0,0,0.04);
+            --shadow-hover: 0 20px 40px rgba(0,0,0,0.08);
+            --highlight-bg: #f0f9ff; /* Subtle highlight for metrics */
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* --- 2. RESET & BASE --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-body);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+        }
+
+        /* --- 3. LAYOUT --- */
+        .layout-container {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* SIDEBAR - OPTIMIZED WIDTH */
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            padding: 3rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 1px solid var(--border-subtle);
+            background: var(--bg-body);
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .sidebar-top { display: flex; flex-direction: column; }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 2.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: block;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s var(--ease);
+            position: relative;
+            width: fit-content;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover, .nav-link.active { color: var(--text-primary); }
+        .nav-link.active::before {
+            content: ''; position: absolute; left: -15px; top: 50%; transform: translateY(-50%);
+            width: 6px; height: 6px; background: var(--text-primary); border-radius: 50%;
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+
+        .status-badge {
+            display: inline-flex; align-items: center;
+            font-size: 0.75rem; color: #059669; background: #ECFDF5;
+            padding: 4px 10px; border-radius: 20px; width: fit-content;
+        }
+        .status-dot {
+            width: 6px; height: 6px; background: #059669; border-radius: 50%; margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+        .socials { display: flex; gap: 1rem; }
+        .social-icon {
+            color: var(--text-secondary); font-size: 1.1rem; transition: 0.3s;
+        }
+        .social-icon:hover { color: var(--text-primary); transform: translateY(-2px); }
+
+        /* MAIN CONTENT */
+        .main-content { flex: 1; padding: 6rem 6%; }
+
+        section {
+            margin-bottom: 10rem; opacity: 0; transform: translateY(20px);
+            transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+            scroll-margin-top: 140px; 
+        }
+        section.visible { opacity: 1; transform: translateY(0); }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3 { color: var(--text-primary); font-weight: 600; letter-spacing: -0.02em; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 4.5rem; line-height: 1.1; margin-bottom: 1.5rem; }
+        h2 { font-size: 2rem; margin-bottom: 2.5rem; }
+        
+        .subtitle { color: var(--text-secondary); font-size: 1.2rem; max-width: 580px; margin-bottom: 3rem; }
+
+        /* BUTTONS */
+        .btn-minimal {
+            display: inline-block; padding: 1rem 2rem; background: var(--text-primary); color: white;
+            text-decoration: none; border-radius: 4px; font-size: 0.9rem; font-weight: 500;
+            transition: 0.3s var(--ease); border: 1px solid var(--text-primary);
+            cursor: pointer;
+        }
+        .btn-minimal:hover { background: white; color: var(--text-primary); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+
+        .btn-outline {
+            display: inline-block; padding: 0.8rem 1.5rem; background: transparent;
+            color: var(--text-primary); text-decoration: none; border-radius: 4px;
+            font-size: 0.85rem; font-weight: 500; border: 1px solid var(--border-subtle);
+            transition: 0.3s var(--ease); width: 100%; text-align: center;
+        }
+        .btn-outline:hover { border-color: var(--text-primary); background: white; }
+
+        .btn-small {
+            font-size: 0.8rem; padding: 6px 12px; border: 1px solid var(--border-subtle);
+            border-radius: 4px; text-decoration: none; color: var(--text-primary);
+            display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;
+            background: #fff;
+        }
+        .btn-small:hover { border-color: var(--text-primary); background: #f9f9f9; }
+
+        /* GRIDS */
+        .grid-2 { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 2.5rem; 
+        }
+        
+        /* CARDS */
+        .clean-card {
+            background: var(--bg-card); padding: 2.5rem; border-radius: 12px;
+            border: 1px solid var(--border-subtle); transition: 0.4s var(--ease);
+            display: flex; flex-direction: column; height: 100%;
+        }
+        .clean-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-soft); border-color: transparent; }
+        
+        .project-meta { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 8px; }
+        
+        /* Updated: Removed icon style as icons are removed */
+        /* .project-icon { font-size: 1rem; color: var(--text-primary); } */
+        
+        .clean-card h3 { font-size: 1.4rem; margin-bottom: 1rem; }
+        .clean-card p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem; flex-grow: 1; }
+        
+        /* Data Highlight in text */
+        strong.metric { color: var(--text-primary); font-weight: 600; background: var(--highlight-bg); padding: 0 4px; border-radius: 2px; }
+
+        .card-actions { display: flex; gap: 10px; margin-top: auto; padding-top: 1.5rem; border-top: 1px solid #f5f5f5; flex-wrap: wrap;}
+
+        .tech-stack { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .tech-tag { font-size: 0.75rem; padding: 4px 10px; background: #F5F5F5; color: #555; border-radius: 4px; }
+
+        /* CERTIFICATIONS */
+        .cert-item {
+            display: flex; align-items: flex-start; gap: 1.5rem; padding: 1.5rem;
+            background: var(--bg-card); border: 1px solid var(--border-subtle);
+            border-radius: 8px; transition: 0.3s;
+        }
+        .cert-item:hover { border-color: var(--text-primary); box-shadow: var(--shadow-soft); }
+        .cert-icon { font-size: 1.5rem; color: var(--text-secondary); margin-top: 5px; }
+        
+        .cert-info { display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+        .cert-info h4 { font-size: 1rem; margin: 0; font-weight: 600; }
+        .cert-info span { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
+
+        /* SKILLS */
+        .skill-category { margin-bottom: 2rem; }
+        .skill-category h3 { font-size: 1.1rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle); }
+        .skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
+        .skill-pill {
+            display: flex; align-items: center; gap: 10px; padding: 10px 15px;
+            background: var(--bg-card); border: 1px solid var(--border-subtle);
+            border-radius: 6px; font-size: 0.9rem; font-weight: 500;
+        }
+
+        /* TIMELINE */
+        .timeline-item {
+            border-left: 2px solid var(--border-subtle); padding-left: 2rem;
+            margin-bottom: 2.5rem; position: relative;
+        }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -6px; top: 6px;
+            width: 10px; height: 10px; background: var(--bg-body);
+            border: 2px solid var(--text-secondary); border-radius: 50%;
+        }
+        .timeline-date { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem; display: block; }
+
+        /* FORM */
+        .form-group { margin-bottom: 1.5rem; }
+        .form-control {
+            width: 100%; padding: 1rem; background: var(--bg-card);
+            border: 1px solid var(--border-subtle); font-family: 'Inter';
+            font-size: 1rem; color: var(--text-primary); border-radius: 6px; transition: 0.3s;
+        }
+        .form-control:focus { outline: none; border-color: var(--text-primary); }
+
+        /* BACK TO TOP BUTTON */
+        .back-to-top {
+            position: fixed; bottom: 2rem; right: 2rem; width: 3.5rem; height: 3.5rem;
+            background-color: var(--text-primary); color: #fff; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
+            cursor: pointer; opacity: 0; visibility: hidden; transform: translateY(20px);
+            transition: all 0.3s var(--ease); z-index: 999; text-decoration: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        .back-to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .back-to-top:hover { transform: translateY(-5px); background-color: #333; }
+
+        /* Primary Resume Button (Visible on All Devices) */
+        .primary-resume-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .mobile-resume-btn { display: none; align-items: center; justify-content: center; gap: 8px; }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .layout-container { flex-direction: column; }
+            .sidebar { 
+                width: 100%; height: auto; position: sticky; top: 0;
+                padding: 1.5rem 1.5rem; border-right: none; 
+                border-bottom: 1px solid var(--border-subtle);
+                gap: 1rem;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+                overflow-y: visible;
+            }
+            .nav-links { 
+                flex-direction: row; overflow-x: auto; width: 100%; padding-bottom: 5px; gap: 1.5rem;
+                scrollbar-width: none;
+            }
+            .nav-links::-webkit-scrollbar { display: none; }
+            .nav-link.active::before { display: none; }
+            .nav-link.active { color: var(--text-primary); border-bottom: 2px solid var(--text-primary); }
+            
+            .sidebar-footer { display: none; } 
+            .main-content { padding: 3rem 1.5rem; }
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1.1rem; }
+            .mobile-resume-btn { display: inline-flex; }
+            .primary-resume-btn { display: none; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            .clean-card { padding: 1.5rem; }
+            .grid-2 { grid-template-columns: 1fr; } 
+            .sidebar { padding: 1rem; }
+            .back-to-top { bottom: 1.5rem; right: 1.5rem; width: 3rem; height: 3rem; }
+        }
+    </style>
 </head>
-
 <body>
-    <header>
-        <a href="#" class="logo">Saurav Ojha</a>
-        <nav>
-            <a href="index.html" class="active">Home</a>
-            <a href="services.html">Services</a>
-            <a href="Skills.html">Skills</a>
-            <a href="education.html">Education</a>
-            <a href="experience.html">Experience</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-    </header>
 
-    <section class="home">
-        <div class="home-img">
-            <img src="https://raw.githubusercontent.com/Eeeeco/Portfolio/main/Mee.png" alt="Profile Picture">
-        </div>
-        <div class="home-content">
-            <h1>Hi, It's <span>Saurav</span></h1>
-            <h3 class="typing-text">I'm a <span></span></h3>
-            <p> I’m a data enthusiast advancing my skills in data science. Through a specialized course, I’ve gained hands-on experience in data cleaning, statistical modeling, and visualization, with practical knowledge of Python, Pandas, NumPy, SQL, and BI tools like Tableau and Power BI.</p>
-            <p>I’m still building my confidence in some areas, but I’m excited to continuously refine my skills and apply them to solve real-world challenges.</p>
-            <div class="social-icons">
-                <a href="https://www.linkedin.com/in/sauravojha"><i class="fa-brands fa-linkedin"></i></a>
-                <a href="https://github.com/Eeeeco"><i class="fa-brands fa-github"></i></a>
-                <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+    <div class="layout-container">
+        
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <a href="#" class="logo">Saurav Ojha</a>
+                <nav class="nav-links">
+                    <a href="#home" class="nav-link active">Intro</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#projects" class="nav-link">Projects</a>
+                    <a href="#certifications" class="nav-link">Certifications</a>
+                    <a href="#skills" class="nav-link">Expertise</a>
+                    <a href="#experience" class="nav-link">Experience</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </nav>
             </div>
-            <a href="https://drive.google.com/file/d/1f0xowksq-tYZVoJnBGhxD9Cm9MawVHIC/view?usp=drive_link" class="btn">Download CV</a>
-        </div>
-    </section>
 
-    <!-- Footer Section -->
-    <footer>
-        <div class="footer-content">
-            <ul>
-                <li><a href="#privacy">Privacy Policy</a></li>
-                <li><a href="#terms">Terms of Service</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="#other">Other Links</a></li>
-            </ul>
-        </div>
-        <p>&copy; 2025 Saurav Ojha. All rights reserved.</p>
-    </footer>
+            <div class="sidebar-footer">
+                <div class="status-badge"><div class="status-dot"></div> Available for work</div>
+                <a href="https://docs.google.com/document/d/16FV3bjZq4vz48fH0dCRBfhYk_vvWvC_H/export?format=pdf" class="btn-outline"><i class="fas fa-download"></i> Download Resume</a>
+                <div class="socials">
+                    <a href="https://www.linkedin.com/in/sauravojha/" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://github.com/lightwordz" class="social-icon"><i class="fab fa-github"></i></a>
+                    <a href="mailto:sauravojha124@gmail.com" class="social-icon"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+
+            <section id="home">
+                <h1>Translating Data into<br>Business Impact.</h1>
+                <p class="subtitle">I am a <strong>Data Scientist</strong> bridging the gap between raw data and strategic decisions. Expert in Machine Learning pipelines, RCM Analytics, and automated reporting.</p>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                    <a href="#projects" class="btn-minimal">View Case Studies</a>
+                    <a href="#contact" class="btn-outline" style="width: auto;">Contact Me</a>
+                    <a href="https://docs.google.com/document/d/16FV3bjZq4vz48fH0dCRBfhYk_vvWvC_H/export?format=pdf" class="btn-outline mobile-resume-btn" style="width: auto;"><i class="fas fa-download"></i> Download CV</a>
+                </div>
+            </section>
+
+            <section id="about">
+                <h2>About Me</h2>
+                <div class="grid-2">
+                    <div>
+                        <p style="margin-bottom: 1rem; color: #444;">
+                            With a strong foundation in financial accounting and modern data science, I bring a unique perspective to analytics. I don't just code; I understand the "why" behind the numbers.
+                        </p>
+                        <p style="color: #444;">
+                            My goal is to help organizations move from reactive reporting to proactive predictive analytics using tools like <strong>Python, SQL, and Tableau</strong>.
+                        </p>
+                    </div>
+                    <div style="display:flex; justify-content: center;">
+                         <img src="https://github.com/Eeeeco/Portfolio/blob/main/my-image.png?raw=true" alt="Saurav" style="width: 180px; height: 180px; object-fit: cover; border-radius: 50%; filter: grayscale(100%);">
+                    </div>
+                </div>
+            </section>
+
+            <section id="projects">
+                <h2>Selected Projects</h2>
+                <div class="grid-2">
+                    
+                    <!-- Project: Employee Performance -->
+                    <div class="clean-card">
+                        <span class="project-meta">Predictive Analytics • HR Tech</span>
+                        <h3>Employee Performance Prediction</h3>
+                        <p>Engineered an XGBoost predictive model achieving <strong class="metric">95% accuracy</strong> in forecasting employee performance ratings. Identified top 3 retention drivers using feature importance analysis on demographic data.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">XGBoost</span>
+                            <span class="tech-tag">Scikit-Learn</span>
+                        </div>
+                        <div class="card-actions">
+                            <a href="https://github.com/lightwordz/INX_Employee_Performance" target="_blank" class="btn-small"><i class="fab fa-github"></i> View Code</a>
+                        </div>
+                    </div>
+
+                    <!-- Project: Churn Prediction -->
+                    <div class="clean-card">
+                        <span class="project-meta">Classification • Retention</span>
+                        <h3>Customer Churn Prediction</h3>
+                        <p>Developed a Random Forest classifier to detect at-risk customers with <strong class="metric">88% precision</strong>. Enabled targeted retention campaigns, reducing potential revenue loss by <strong class="metric">15%</strong> through proactive segmentation.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Pandas</span>
+                            <span class="tech-tag">Scikit-Learn</span>
+                        </div>
+                        <div class="card-actions">
+                            <a href="https://github.com/lightwordz/INX_Employee_Performance" target="_blank" class="btn-small"><i class="fab fa-github"></i> View Code</a>
+                        </div>
+                    </div>
+
+                    <!-- Project: Heart Disease -->
+                    <div class="clean-card">
+                        <span class="project-meta">Machine Learning • Healthcare</span>
+                        <h3>Heart Disease Prediction Model</h3>
+                        <p>Deployed a Logistic Regression model with <strong class="metric">92% accuracy</strong> for early cardiac risk detection. Optimized feature selection via extensive EDA, identifying critical biomarkers like cholesterol levels.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Scikit-Learn</span>
+                            <span class="tech-tag">Matplotlib</span>
+                        </div>
+                        <div class="card-actions">
+                            <a href="https://github.com/lightwordz/INX_Employee_Performance" target="_blank" class="btn-small"><i class="fab fa-github"></i> View Code</a>
+                            <a href="https://github.com/lightwordz/INX_Employee_Performance" target="_blank" class="btn-small"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                        </div>
+                    </div>
+
+                    <!-- Project: Insurance Claims -->
+                    <div class="clean-card">
+                        <span class="project-meta">RCM Analytics • Finance</span>
+                        <h3>Insurance Claims Optimization</h3>
+                        <p>Architected an automated SQL pipeline to flag high-risk claims, preventing <strong class="metric">$50k annual revenue leakage</strong>. Reduced claim denial rates by <strong class="metric">12%</strong> through root cause analysis of historical data.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">SQL</span>
+                            <span class="tech-tag">Tableau</span>
+                            <span class="tech-tag">Excel</span>
+                        </div>
+                        <div class="card-actions">
+                            <a href="https://github.com/lightwordz/INX_Employee_Performance" target="_blank" class="btn-small"><i class="fab fa-github"></i> View Query</a>
+                            <a href="https://github.com/lightwordz/INX_Employee_Performance" target="_blank" class="btn-small"><i class="fas fa-chart-bar"></i> Dashboard</a>
+                        </div>
+                    </div>
+
+                    <!-- Project: House Price -->
+                    <div class="clean-card">
+                        <span class="project-meta">Predictive Modeling • Real Estate</span>
+                        <h3>House Price Prediction Engine</h3>
+                        <p>Built a robust regression engine for real-time market valuation. Enhanced model performance by <strong class="metric">20%</strong> through advanced feature engineering on geolocation and historical pricing datasets.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Pandas</span>
+                            <span class="tech-tag">Seaborn</span>
+                            <span class="tech-tag">Scipy</span>
+                        </div>
+                        <div class="card-actions">
+                            <a href="https://github.com/lightwordz/INX_Employee_Performance" target="_blank" class="btn-small"><i class="fab fa-github"></i> View Code</a>
+                        </div>
+                    </div>
+
+                    <!-- Project: Bike Rental -->
+                    <div class="clean-card">
+                        <span class="project-meta">Visualization • Operations</span>
+                        <h3>Bike Rental Fleet Analysis</h3>
+                        <p>Designed interactive Power BI dashboards to optimize fleet logistics. Reduced operational overhead by <strong class="metric">15%</strong> by identifying peak usage patterns and implementing data-driven rebalancing strategies.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Power BI</span>
+                            <span class="tech-tag">DAX</span>
+                        </div>
+                        <div class="card-actions">
+                            <a href="https://github.com/lightwordz/INX_Employee_Performance" target="_blank" class="btn-small"><i class="fas fa-chart-pie"></i> View Report</a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section id="certifications">
+                <h2>Certifications & Awards</h2>
+                <div class="grid-2">
+                    <div class="cert-item">
+                        <i class="fas fa-atom cert-icon"></i>
+                        <div class="cert-info">
+                            <h4>Certified Data Scientist</h4>
+                            <span>IABAC • 2025</span>
+                            <a href="https://drive.google.com/file/d/1_KDvrSuiuVdZC9uAot3zv1IlatoKDwMV/view?usp=drive_link" target="_blank" class="btn-small"><i class="fas fa-eye"></i> View Certificate</a>
+                        </div>
+                    </div>
+
+                    <div class="cert-item">
+                        <i class="fas fa-microchip cert-icon"></i>
+                        <div class="cert-info">
+                            <h4>Certified Data Scientist</h4>
+                            <span>Nasscom FutureSkills • 2025</span>
+                            <a href="https://drive.google.com/file/d/1ll-7hD-Bq99IcTpuhGaerriI-hXSB4Of/view?usp=drive_link" target="_blank" class="btn-small"><i class="fas fa-eye"></i> View Certificate</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="skills">
+                <h2>Technical Expertise</h2>
+                <div class="grid-2">
+                    <div class="skill-category">
+                        <h3>Advanced Data Science</h3>
+                        <div class="skill-grid">
+                            <div class="skill-pill"><i class="fas fa-brain"></i> Deep Learning</div>
+                            <div class="skill-pill"><i class="fas fa-language"></i> NLP</div>
+                            <div class="skill-pill"><i class="fas fa-layer-group"></i> TensorFlow</div>
+                            <div class="skill-pill"><i class="fas fa-fire"></i> PyTorch</div>
+                            <div class="skill-pill"><i class="fas fa-calculator"></i> Statistics</div>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Languages & Databases</h3>
+                        <div class="skill-grid">
+                            <div class="skill-pill"><i class="fab fa-python"></i> Python</div>
+                            <div class="skill-pill"><i class="fas fa-database"></i> SQL</div>
+                            <div class="skill-pill"><i class="fab fa-r-project"></i> R</div>
+                            <div class="skill-pill"><i class="fas fa-code"></i> HTML/CSS</div>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Tools & Frameworks</h3>
+                        <div class="skill-grid">
+                            <div class="skill-pill"><i class="fas fa-chart-bar"></i> Tableau</div>
+                            <div class="skill-pill"><i class="fas fa-chart-pie"></i> Power BI</div>
+                            <div class="skill-pill"><i class="fas fa-file-excel"></i> Excel</div>
+                            <div class="skill-pill"><i class="fas fa-brain"></i> Scikit-Learn</div>
+                            <div class="skill-pill"><i class="fab fa-github"></i> Git</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="experience">
+                <h2>Experience & Education</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3 style="font-size: 1.2rem; margin-bottom: 1.5rem; color: var(--text-secondary);">Experience</h3>
+                        <div class="timeline-item">
+                            <span class="timeline-date">2023 - Present</span>
+                            <h3>Senior Executive</h3>
+                            <p class="project-meta">Access Healthcare</p>
+                            <p>Optimized RCM workflows using data insights, reducing claim denial rates by 12%. Mentored junior analysts in Excel automation.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-date">2024 - 2025</span>
+                            <h3>Data Scientist Consultant</h3>
+                            <p class="project-meta">Rubixe AI</p>
+                            <p>Developed predictive models for client datasets. Cleaned and preprocessed over 1TB of raw data for ML pipelines.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-date">2021 - 2023</span>
+                            <h3>Analyst</h3>
+                            <p class="project-meta">R1 RCM</p>
+                            <p>Analyzed revenue cycle data to identify trends and improve billing efficiency. Generated reports to track KPIs and identify areas for process improvement.</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 style="font-size: 1.2rem; margin-bottom: 1.5rem; color: var(--text-secondary);">Education</h3>
+                        <div class="timeline-item">
+                            <span class="timeline-date">2025 - 2027</span>
+                            <h3>MBA Business Analytics</h3>
+                            <p class="project-meta">UPES University</p>
+                        </div>
+                        <div class="timeline-item">
+                            <span class="timeline-date">2019 - 2023</span>
+                            <h3>Bachelor of Commerce</h3>
+                            <p class="project-meta">IGNOU University</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact">
+                <h2>Let's Collaborate</h2>
+                <div class="grid-2">
+                    <div>
+                        <p class="subtitle">I am open to full-time Data Scientist roles. Feel free to reach out if you'd like to discuss my projects or potential opportunities.</p>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div>
+                                <strong style="display: block; font-size: 0.9rem;">Email</strong>
+                                <a href="mailto:sauravojha124@gmail.com" style="color: var(--text-primary); text-decoration: none;">sauravojha124@gmail.com</a>
+                            </div>
+                            <div>
+                                <strong style="display: block; font-size: 0.9rem;">Location</strong>
+                                <span>Noida, India (Open to Remote)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form action="https://formspree.io/f/myzlobjz" method="post">
+                        <div class="form-group">
+                            <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="message" class="form-control" rows="4" placeholder="How can I help you?" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-minimal" style="width: 100%; border: none; cursor: pointer;">Send Message</button>
+                    </form>
+                </div>
+            </section>
+
+            <footer style="margin-top: 5rem; padding-top: 2rem; border-top: 1px solid var(--border-subtle); color: var(--text-secondary); font-size: 0.8rem;">
+                &copy; 2025 Saurav Ojha.
+            </footer>
+
+        </main>
+        
+        <!-- Back To Top Button -->
+        <a href="#home" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+    </div>
 
     <script>
-        // JavaScript to animate the footer when it comes into view
-        window.addEventListener('scroll', function () {
-            const footer = document.querySelector('footer');
-            const footerPosition = footer.getBoundingClientRect().top;
-            const screenHeight = window.innerHeight;
+        // FADE IN ANIMATION
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
 
-            // If the footer is within the visible viewport
-            if (footerPosition < screenHeight) {
-                footer.classList.add('visible');
+        document.querySelectorAll('section').forEach(section => observer.observe(section));
+
+        // ACTIVE LINK SCROLL SPY
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            // Determine offset based on mobile (sidebar acts as header) vs desktop
+            const isMobile = window.innerWidth <= 1024;
+            const offset = isMobile ? 180 : 0; 
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= (sectionTop - offset - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Back To Top Logic
+            const backToTopBtn = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
             }
         });
     </script>
-
 </body>
 </html>
