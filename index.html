@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- ==============================================
+         FAVICON & IDENTITY SYSTEM
+         ============================================== -->
+    <link rel="apple-touch-icon" sizes="180x180" href="Assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="Assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="Assets/favicon-16x16.png">
+    <link rel="manifest" href="Assets/site.webmanifest">
+    <link rel="shortcut icon" href="Assets/favicon.ico">
+    
     <!-- SEO & SOCIAL PREVIEW TAGS -->
     <title>Saurav Ojha | Data Scientist</title>
     <meta name="description" content="Portfolio of Saurav Ojha, a Data Scientist specializing in Machine Learning, RCM Analytics, and Predictive Modeling. View case studies and resume.">
@@ -14,6 +23,7 @@
     <meta property="og:title" content="Saurav Ojha | Data Scientist">
     <meta property="og:description" content="Bridging the gap between raw data and business impact. View my Data Science projects and case studies.">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="https://github.com/Eeeeco/Portfolio/blob/main/sauravimg_git.png?raw=true">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -130,11 +140,11 @@
             margin-top: auto;
         }
 
-        /* Centered Sidebar Socials */
+        /* Centered Social Icons */
         .socials { 
             display: flex; 
             gap: 1rem; 
-            justify-content: center;
+            justify-content: center; /* Centers the icons horizontally */
         }
         
         .social-icon {
@@ -300,7 +310,9 @@
             .nav-link.active::before { display: none; }
             .nav-link.active { color: var(--text-primary); border-bottom: 2px solid var(--text-primary); }
             
+            /* Hide sidebar footer on mobile */
             .sidebar-footer { display: none; } 
+            
             .main-content { padding: 3rem 1.5rem; }
             h1 { font-size: 2.5rem; }
             .subtitle { font-size: 1.1rem; }
@@ -314,6 +326,19 @@
             .grid-2 { grid-template-columns: 1fr; } 
             .sidebar { padding: 1rem; }
             .back-to-top { bottom: 1.5rem; right: 1.5rem; width: 3rem; height: 3rem; }
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            .sidebar, .back-to-top, .btn-minimal, .btn-outline, .card-actions, .mobile-resume-btn { display: none !important; }
+            .layout-container { display: block; width: 100%; max-width: none; }
+            .main-content { padding: 0; }
+            body { background: #fff; color: #000; }
+            section { margin-bottom: 3rem; page-break-inside: avoid; opacity: 1; transform: none; }
+            a { text-decoration: none; color: #000; }
+            h1 { font-size: 24pt; }
+            h2 { font-size: 18pt; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+            .clean-card, .cert-item { border: none; padding: 0; margin-bottom: 1rem; }
         }
     </style>
 </head>
@@ -373,7 +398,8 @@
                         </p>
                     </div>
                     <div style="display:flex; justify-content: center;">
-                         <img src="https://github.com/Eeeeco/Portfolio/blob/main/my-image.png?raw=true" alt="Saurav" style="width: 180px; height: 180px; object-fit: cover; border-radius: 50%; filter: grayscale(100%);">
+                         <!-- FIX: Using the exact link you provided -->
+                         <img src="https://github.com/Eeeeco/Portfolio/blob/main/sauravimg_git.png?raw=true" alt="Saurav" style="width: 180px; height: 180px; object-fit: cover; border-radius: 50%;">
                     </div>
                 </div>
             </section>
@@ -591,13 +617,14 @@
                                 <span>Noida, India (Open to Remote)</span>
                             </div>
                             
-                            <!-- MERGED: Social Icons & Email Action in one row -->
+                            <!-- FIX: Unified Social Row on Mobile -->
                             <div style="margin-top: 1rem;">
                                 <strong style="display: block; font-size: 0.9rem; margin-bottom: 0.5rem;">Connect</strong>
                                 <div style="display: flex; gap: 1rem;">
-                                    <a href="https://www.linkedin.com/in/sauravojha/" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                                    <a href="https://github.com/lightwordz" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
-                                    <a href="mailto:sauravojha124@gmail.com" class="social-icon" title="Email Me"><i class="fas fa-envelope"></i></a>
+                                    <a href="https://www.linkedin.com/in/sauravojha/" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                                    <a href="https://github.com/lightwordz" class="social-icon"><i class="fab fa-github"></i></a>
+                                    <!-- Email added to row -->
+                                    <a href="mailto:sauravojha124@gmail.com" class="social-icon"><i class="fas fa-envelope"></i></a>
                                 </div>
                             </div>
                         </div>
