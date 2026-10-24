@@ -1,8 +1,3 @@
-# Minimalist Portfolio 
+# Updated Portfolio
 
-Hello, 
-
-You can go through it to view my curriculum vitae.
-
-Thanks.
-
+Please go through my portfolio to view my curriculum vitae..
